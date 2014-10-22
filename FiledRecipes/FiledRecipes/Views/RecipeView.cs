@@ -4,6 +4,7 @@ using FiledRecipes.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace FiledRecipes.Views
 {
@@ -12,6 +13,25 @@ namespace FiledRecipes.Views
     /// </summary>
     public class RecipeView : ViewBase, IRecipeView
     {
-        hohjhojhohj ho
+        static void Main(string[] args)
+        {
+            try
+            {
+                using (StreamReader reader = new StreamReader("Recipes.txt"))
+                {
+                    string line;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        Console.WriteLine(line);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Fel inträffade vid läsning av textfil.");
+            }
+    }
     }
 }
