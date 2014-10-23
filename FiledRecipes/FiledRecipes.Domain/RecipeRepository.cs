@@ -127,5 +127,30 @@ namespace FiledRecipes.Domain
                 handler(this, e);
             }
         }
+        public virtual void Save() { }
+
+        public virtual void Load()
+        {
+
+            List<IRecipe> recipies = new List<IRecipe>();
+            RecipeReadStatus status = RecipeReadStatus.Indefinite;
+
+            using (StreamReader reader = new StreamReader(_path))
+            {
+                string row;
+                while ((row = reader.ReadLine()) != null)
+                {
+                    if (!String.IsNullOrWhiteSpace(row))
+                    {
+
+                    }
+
+
+
+                }
+
+            }
+        }
     }
 }
+
