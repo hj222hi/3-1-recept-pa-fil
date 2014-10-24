@@ -134,15 +134,56 @@ namespace FiledRecipes.Domain
 
             List<IRecipe> recipies = new List<IRecipe>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite;
+            Recipe recipe = null;
 
             using (StreamReader reader = new StreamReader(_path))
             {
                 string row;
                 while ((row = reader.ReadLine()) != null)
                 {
-                    if (!String.IsNullOrWhiteSpace(row))
+                    if (row !="")
                     {
+                        if (row == SectionRecipe)
+                        { 
+                        status = RecipeReadStatus.New;
+                        }
+                        else if (row == SectionIngredients)
+                        {
+                            status = RecipeReadStatus.Ingredient;
+                        }
+                        else if (row == SectionInstructions)
+                        {
+                            status = RecipeReadStatus.Instruction;
+                        }
+                        else
+                        switch(status){
+                            
+                            case RecipeReadStatus.New:
+                                    recipe = new Recipe(row);
+                                    recipies.Add(recipe);
+                                    break;
+                            case RecipeReadStatus.Ingredient:
+                                    string[] splitIngredient = row.Split(new string[] { ";" }, StringSplitOptions.None);
+                                    if (splitIngredient.Length != 3)
+                                    {
+                                        throw new FileFormatException();
+                                    }
+                                    Ingredient ingredient = new Ingredient();
+                                    ingredient.Amount = splitIngredient[0];
+                                    ingredient.Measure = splitIngredient[1];
+                                    ingredient.Name = splitIngredient[2];
+                                    recipe.Add(ingredient);
+                                    break;
+                                    case RecipeReadStatus.Instruction:
+                                        recipe.Add(row);
+                                        break;
+                                    case RecipeReadStatus.Indefinite:
+                                        throw new FileFormatException();
+                            }
+                       recipies.OrderBy(o=>o.OrderDate).ToList();
 
+
+                        }
                     }
 
 
