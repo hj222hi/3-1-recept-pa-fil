@@ -180,7 +180,10 @@ namespace FiledRecipes.Domain
                                     case RecipeReadStatus.Indefinite:
                                         throw new FileFormatException();
                             }
-                       recipies.OrderBy(o=>o.OrderDate).ToList();
+                            
+                         _recipes = recipies.OrderBy(recipie => recipie.Name).ToList();
+                        IsModified = false;
+                        OnRecipesChanged(EventArgs.Empty);
 
 
                         }
