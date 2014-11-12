@@ -4,7 +4,6 @@ using FiledRecipes.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 
 namespace FiledRecipes.Views
 {
@@ -13,25 +12,41 @@ namespace FiledRecipes.Views
     /// </summary>
     public class RecipeView : ViewBase, IRecipeView
     {
-        static void Main(string[] args)
+        public void Show(IRecipe recipe)
         {
-            try
-            {
-                using (StreamReader reader = new StreamReader("Recipes.txt"))
-                {
-                    string line;
+            Console.Clear();
 
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        Console.WriteLine(line);
-                    }
-                }
+            //Skriv ut receptets namn i en header
+            Header = recipe.Name;
+            ShowHeaderPanel();
 
-            }
-            catch (Exception)
+            //Skriver ut ingredienserna
+            Console.WriteLine("\nIngredienser\n=============");
+            foreach (Ingredient ingredient in recipe.Ingredients)
             {
-                Console.WriteLine("Fel inträffade vid läsning av textfil.");
+                Console.WriteLine(ingredient);
             }
-    }
+
+            //Skriver ut instruktionerna
+            Console.WriteLine("\nGör så här\n==========");
+            int i = 0;
+
+            foreach (var instruction in recipe.Instructions)
+            {
+                Console.WriteLine(++i);
+                Console.WriteLine("{0}\n", instruction);
+            }
+        }
+
+        public void Show(IEnumerable<IRecipe> recipes)
+        {
+            //Skriv ut alla recept använder den tidigare metoden i denna klass
+            //Tryck ner en tangent för att visa nästa recept
+            foreach (var recipe in recipes)
+            {
+                Show(recipe);
+                ContinueOnKeyPressed();
+            }
+        }
     }
 }
